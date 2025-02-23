@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipamentos - AgroLoja</title>
+    <title>AgroLoja</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,23 +13,27 @@
         </div>
         <nav>
             <ul>
-                <li><a href="home.html">Home</a></li>
+                <li><a href="home.php">Home</a></li>
                 <li><a href="paginas.html">Páginas</a></li>
                 <li><a href="contato.html">Contato</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="store-image"></div> <!-- Imagem de Equipamentos -->
+    <div class="store-image"></div> <!-- Imagem do estabelecimento -->
+
+    <section class="subprodutos">
+        <!-- Your existing subprodutos links (equinos.html, suinos.html, etc.) -->
+    </section>
 
     <section class="carrossel">
         <?php
-        // 🗄️ Connect to MySQL database
+        // 🗄️ Connect to MySQL database (same as admin.php)
         $conn = new mysqli('localhost', 'root', '', 'uni_db');
         if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 
-        // 📥 Fetch products related to Equipamentos from the database
-        $result = $conn->query("SELECT * FROM products WHERE category = 'Equipamentos'");
+        // 📥 Fetch products from the database
+        $result = $conn->query("SELECT * FROM products");
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo '

@@ -23,24 +23,29 @@
     <div class="store-image"></div> <!-- Imagem de Equinos -->
 
     <section class="carrossel">
-        <div class="produto">
-            <img src="images/cela.jpg" alt="Celas">
-            <p>Cela de Montaria</p>
-            <p>Preço: R$350,00</p>
-            <p>Descrição: Cela de couro resistente e confortável.</p>
-        </div>
-        <div class="produto">
-            <img src="images/feno.jpg" alt="Feno">
-            <p>Feno Nutritivo</p>
-            <p>Preço: R$80,00</p>
-            <p>Descrição: Feno de alta qualidade para equinos.</p>
-        </div>
-        <div class="produto">
-            <img src="images/ferradura.jpg" alt="Ferraduras">
-            <p>Ferraduras</p>
-            <p>Preço: R$50,00</p>
-            <p>Descrição: Ferraduras reforçadas para maior durabilidade.</p>
-        </div>
+        <?php
+        // 🗄️ Connect to MySQL database
+        $conn = new mysqli('localhost', 'root', '', 'uni_db');
+        if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+
+        // 📥 Fetch products related to Equinos from the database
+        $result = $conn->query("SELECT * FROM products WHERE category = 'Equinos'");
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo '
+                <div class="produto">
+                    <img src="' . htmlspecialchars($row['image_path']) . '" alt="' . htmlspecialchars($row['name']) . '">
+                    <p>' . htmlspecialchars($row['name']) . '</p>
+                    <p>Preço: R$' . number_format($row['price'], 2, ',', '.') . '</p>
+                    <p>Descrição: ' . htmlspecialchars($row['description']) . '</p>
+                </div>
+                ';
+            }
+        } else {
+            echo "<p>Nenhum produto cadastrado ainda.</p>";
+        }
+        $conn->close();
+        ?>
     </section>
 
     <footer>
