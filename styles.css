@@ -120,9 +120,14 @@ header nav ul li a:hover {
 }
 
 .products {
+    text-align: center;
+}
+
+.product-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center; /* Center the products */
+    margin-top: 20px;
 }
 
 .produto {
@@ -133,6 +138,11 @@ header nav ul li a:hover {
     transition: transform 0.3s;
     text-align: center;
     width: 200px; /* Adjust the width as needed */
+    height: 300px; /* Set a fixed height for all product boxes */
+    cursor: pointer; /* Make the cursor a pointer to indicate it's clickable */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .produto img {

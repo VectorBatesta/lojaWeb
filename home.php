@@ -20,7 +20,7 @@
         </nav>
     </header>
 
-    <div class="store-image"></div> <!-- Imagem de Início -->
+    <div class="store-image" style="background-image: url('images/agropecuaria.jpg');"></div> <!-- Imagem de Início -->
 
     <section class="categories">
         <h2>Categorias</h2>
@@ -53,21 +53,23 @@
             $query .= " WHERE category = (SELECT id FROM categories WHERE name = '$category')";
         }
         $result = $conn->query($query);
+        echo '<div class="product-list">';
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo '
-                <div class="produto">
-                    <a href="product.php?id=' . $row['id'] . '">
+                <a href="product.php?id=' . $row['id'] . '">
+                    <div class="produto">
                         <img src="' . htmlspecialchars($row['image_path']) . '" alt="' . htmlspecialchars($row['name']) . '">
                         <p>' . htmlspecialchars($row['name']) . '</p>
                         <p>Preço: R$' . number_format($row['price'], 2, ',', '.') . '</p>
-                    </a>
-                </div>
+                    </div>
+                </a>
                 ';
             }
         } else {
             echo "<p>Nenhum produto cadastrado ainda.</p>";
         }
+        echo '</div>';
         $conn->close();
         ?>
     </section>
