@@ -13,35 +13,55 @@
         </div>
         <nav>
             <ul>
-                <li><a href="home.php">Home</a></li>
+                <li><a href="home.php">Início</a></li>
                 <li><a href="paginas.html">Páginas</a></li>
                 <li><a href="contato.html">Contato</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="store-image"></div> <!-- Imagem do estabelecimento -->
+    <div class="store-image"></div> <!-- Imagem de Início -->
 
-    <section class="subprodutos">
-        <!-- Your existing subprodutos links (equinos.html, suinos.html, etc.) -->
+    <section class="categories">
+        <h2>Categorias</h2>
+        <ul>
+            <li><a href="home.php" class="all-categories">Todas as Categorias</a></li>
+            <li><a href="home.php?category=Equinos">Equinos</a></li>
+            <li><a href="home.php?category=Suínos">Suínos</a></li>
+            <li><a href="home.php?category=Remédios">Remédios</a></li>
+            <li><a href="home.php?category=Pets">Pets</a></li>
+            <li><a href="home.php?category=Equipamentos">Equipamentos</a></li>
+        </ul>
     </section>
 
-    <section class="carrossel">
+    <section class="products">
         <?php
-        // 🗄️ Connect to MySQL database (same as admin.php)
+        // 🗄️ Conectar ao banco de dados MySQL
         $conn = new mysqli('localhost', 'root', '', 'uni_db');
-        if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+        if ($conn->connect_error) die("Falha na conexão: " . $conn->connect_error);
 
-        // 📥 Fetch products from the database
-        $result = $conn->query("SELECT * FROM products");
+        // 📥 Buscar produtos com base na categoria selecionada
+        $category = isset($_GET['category']) ? $conn->real_escape_string($_GET['category']) : '';
+        if ($category) {
+            echo "<h2>Categoria: " . htmlspecialchars($category) . "</h2>";
+        } else {
+            echo "<h2>Todos os Produtos</h2>";
+        }
+
+        $query = "SELECT * FROM products";
+        if ($category) {
+            $query .= " WHERE category = (SELECT id FROM categories WHERE name = '$category')";
+        }
+        $result = $conn->query($query);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo '
                 <div class="produto">
-                    <img src="' . htmlspecialchars($row['image_path']) . '" alt="' . htmlspecialchars($row['name']) . '">
-                    <p>' . htmlspecialchars($row['name']) . '</p>
-                    <p>Preço: R$' . number_format($row['price'], 2, ',', '.') . '</p>
-                    <p>Descrição: ' . htmlspecialchars($row['description']) . '</p>
+                    <a href="product.php?id=' . $row['id'] . '">
+                        <img src="' . htmlspecialchars($row['image_path']) . '" alt="' . htmlspecialchars($row['name']) . '">
+                        <p>' . htmlspecialchars($row['name']) . '</p>
+                        <p>Preço: R$' . number_format($row['price'], 2, ',', '.') . '</p>
+                    </a>
                 </div>
                 ';
             }
